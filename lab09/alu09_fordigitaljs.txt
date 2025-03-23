@@ -1,0 +1,109 @@
+module top_module (
+	input wire carry_in,
+	input wire [15:0] in_a,
+	input wire [15:0] in_b, 
+	input wire [3:0] select,
+	input wire mode,
+	output wire cout,
+	output wire compare,
+	output wire [15:0] alu_out);
+
+  ALU alu01(carry_in, in_a, in_b, select, mode, cout, compare, alu_out);
+
+endmodule
+
+module ALU (
+input wire carry_in,
+input wire [15:0] in_a,
+input wire [15:0] in_b,
+input wire [3:0] select,
+input wire mode,
+output wire carry_out,
+output wire compare,
+output wire [15:0] alu_out
+);
+    wire [15:0] alu_out_logic, alu_out_arith;
+
+    logic_unit lu01 (
+        .a(in_a), 
+        .b(in_b), 
+        .sel(select), 
+        .lo_out(alu_out_logic)
+    );
+
+    arithmetic_unit au01 (
+        .cin(carry_in), 
+        .a(in_a), 
+        .b(in_b), 
+        .sel(select), 
+        .cout(carry_out), 
+        .cmp(compare), 
+        .ar_out(alu_out_arith)
+    );
+
+    assign alu_out = mode ? alu_out_logic : alu_out_arith;
+
+endmodule
+
+module arithmetic_unit (
+    input cin,
+    input [15:0] a,
+    input [15:0] b,
+    input [3:0] sel, 
+    output reg cout, 
+    output reg cmp, 
+    output reg [15:0] ar_out 
+); 
+    reg [16:0] ar_out_temp;
+    always @(*) begin
+        case(sel)
+            4'b0000: ar_out_temp = {1'b0, a}; 
+            4'b0001: ar_out_temp = {1'b0, a | b};
+            4'b0010: ar_out_temp = {1'b0, a | ~b};
+            4'b0011: ar_out_temp = {1'b0, 16'hFFFF};
+            4'b0100: ar_out_temp = {1'b0, a | (a & ~b)};  
+            4'b0101: ar_out_temp = {1'b0, (a | b)} + {1'b0, (a & ~b)} + cin;
+            4'b0110: ar_out_temp = {1'b0, a} - {1'b0, b} - 17'd1 - cin;
+            4'b0111: ar_out_temp = {1'b0, (a & ~b)} - 17'd1 - cin;
+            4'b1000: ar_out_temp = {1'b0, a} + {1'b0, (a & b)} + cin;
+            4'b1001: ar_out_temp = {1'b0, a} + {1'b0, b} + cin;
+            4'b1010: ar_out_temp = {1'b0, (a | ~b)} + {1'b0, (a & b)} + cin;
+            4'b1011: ar_out_temp = {1'b0, (a & b)} - 17'd1 - cin;
+            4'b1100: ar_out_temp = {1'b0, a} + {1'b0, a} + cin;
+            4'b1101: ar_out_temp = {1'b0, (a | b)} + {1'b0, a} + cin;
+            4'b1110: ar_out_temp = {1'b0, (a | ~b)} + {1'b0, a} + cin;
+            4'b1111: ar_out_temp = {1'b0, a} - 17'd1 - cin;
+        endcase
+        cmp = a == b ? 1 : 0;
+        cout = ar_out_temp[16];
+        ar_out = ar_out_temp [15:0];
+    end
+endmodule
+
+module logic_unit (
+    input [15:0] a,
+    input [15:0] b,
+    input [3:0] sel,
+    output reg [15:0] lo_out
+);
+    always @(*) begin
+        case(sel)
+            4'b0000: lo_out = ~a;
+            4'b0001: lo_out = ~(a | b);
+            4'b0010: lo_out = (~a) & b;
+            4'b0011: lo_out = 16'b0000000000000000;
+            4'b0100: lo_out = ~(a & b);
+            4'b0101: lo_out = ~b;
+            4'b0110: lo_out = a ^ b;
+            4'b0111: lo_out = a & (~b);
+            4'b1000: lo_out = (~a) | b;
+            4'b1001: lo_out = ~(a ^ b);
+            4'b1010: lo_out = b;
+            4'b1011: lo_out = a & b;
+            4'b1100: lo_out = 16'b1111111111111111;
+            4'b1101: lo_out = a | (~b);
+            4'b1110: lo_out = a | b;
+            4'b1111: lo_out = a;
+        endcase
+    end
+endmodule
