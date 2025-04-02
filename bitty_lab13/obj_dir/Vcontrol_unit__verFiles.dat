@@ -1,0 +1,13 @@
+# DESCRIPTION: Verilator output: Timestamp data for --skip-identical.  Delete at will.
+C "--assert -I./rtl --Wall --cc ./rtl/control_unit.v --exe ./test/control_unit/control_unit_tb.cpp"
+S   7892640 15762598696134151  1719310809   830554300  1598506306           0 "/usr/bin/verilator_bin"
+T     15171 16607023626375430  1743589529   906781400  1743589529   906781400 "obj_dir/Vcontrol_unit.cpp"
+T      4211 16044073672954542  1743589529   905784000  1743589529   905784000 "obj_dir/Vcontrol_unit.h"
+T      1860 16044073672954562  1743589529   907779100  1743589529   907779100 "obj_dir/Vcontrol_unit.mk"
+T      4352 10696049115459917  1743589529   905784000  1743589529   905784000 "obj_dir/Vcontrol_unit__Slow.cpp"
+T       574 18014398509937341  1743589529   904828700  1743589529   904828700 "obj_dir/Vcontrol_unit__Syms.cpp"
+T       830 15481123719541453  1743589529   905784000  1743589529   905784000 "obj_dir/Vcontrol_unit__Syms.h"
+T       300 75998243711975181  1743589529   907779100  1743589529   907779100 "obj_dir/Vcontrol_unit__ver.d"
+T         0        0  1743589529   915757400  1743589529   915757400 "obj_dir/Vcontrol_unit__verFiles.dat"
+T      1574 17169973579797199  1743589529   906781400  1743589529   906781400 "obj_dir/Vcontrol_unit_classes.mk"
+S      3666 20266198323624903  1743589527   140202600  1743589527   140202600 "rtl/control_unit.v"
