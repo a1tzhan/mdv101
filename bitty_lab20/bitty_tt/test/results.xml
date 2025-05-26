@@ -1,0 +1,8 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1748195708" />
+    <testcase name="uart_module_test" classname="new_tb" file="/mnt/c/Users/Professional/Desktop/mdv101/bitty_lab20/bitty_tt/test/new_tb.py" lineno="101" time="65306.99095964432" sim_time_ns="61992820.0" ratio_time="949.2524320758819">
+      <failure message="Test failed with RANDOM_SEED=1748195708" />
+    </testcase>
+  </testsuite>
+</testsuites>
